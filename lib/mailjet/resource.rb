@@ -318,7 +318,9 @@ module Mailjet
       payload = attributes.reject { |k,v| v.blank? }
       if persisted?
         payload = payload.slice(*resourceprop.map(&:to_s))
-          .except(*read_only_attributes.map(&:to_s))
+        if read_only_attributes
+          payload = payload.except(*read_only_attributes.map(&:to_s))
+        end
       end
       payload = camelcase_keys(payload)
       payload.tap { |hs| hs.delete("Persisted") }
